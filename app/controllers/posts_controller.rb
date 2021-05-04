@@ -3,11 +3,26 @@ class PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    @post = Post.new
+
+    if params[:q]
+      @posts = Post.where('title LIKE ?', "%#{params[:q]}%").or(Post.where('content LIKE ?', "%#{params[:q]}%"))
+
+      respond_to do |format|
+        format.html { }
+        format.js { }
+      end
+    else
+      @posts = Post.all  
+    end
   end
 
   # GET /posts/1 or /posts/1.json
   def show
+    respond_to do |format|
+      format.html {  }
+      format.js {  }
+    end
   end
 
   # GET /posts/new
@@ -17,6 +32,9 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
+    respond_to do |format|
+      format.js { }
+    end
   end
 
   # POST /posts or /posts.json
@@ -27,9 +45,11 @@ class PostsController < ApplicationController
       if @post.save
         format.html { redirect_to @post, notice: "Post was successfully created." }
         format.json { render :show, status: :created, location: @post }
+        format.js { }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.js { }
       end
     end
   end
@@ -40,9 +60,11 @@ class PostsController < ApplicationController
       if @post.update(post_params)
         format.html { redirect_to @post, notice: "Post was successfully updated." }
         format.json { render :show, status: :ok, location: @post }
+        format.js { }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.js { }
       end
     end
   end
@@ -53,6 +75,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to posts_url, notice: "Post was successfully destroyed." }
       format.json { head :no_content }
+      format.js { }
     end
   end
 

@@ -1,29 +1,57 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Posts</h1>
+<div class=container>
+  <h1>Search in posts</h1>
+    <%= form_with(url: root_path, method: :get, remote: true) do |form| %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Content</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <%= form.text_field :q %>
+    <%= form.submit :search %>
 
-  <tbody>
-    <% @posts.each do |post| %>
-      <tr>
-        <td><%= post.title %></td>
-        <td><%= post.content %></td>
-        <td><%= link_to 'Show', post %></td>
-        <td><%= link_to 'Edit', edit_post_path(post) %></td>
-        <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
     <% end %>
-  </tbody>
-</table>
+</div>
 
 <br>
 
-<%= link_to 'New Post', new_post_path %>
+<div class="container">
+  <div>
+    <%= render "new" %>
+  </div>
+
+  <div id="show_post">
+  </div>
+</div>
+
+<br>
+
+<div class=container>
+  <h1>Posts</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Content</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
+
+      <tbody id="table">
+        <% @posts.each do |post| %>
+          <tr id="post_<%= post.id %>">
+            <td><%= post.title %></td>
+            <td><%= post.content %></td>
+            <td><%= link_to 'Show', post, remote: true %></td>
+            <td><%= link_to 'Edit', edit_post_path(post.id), remote: true %></td>
+            <td><%= link_to 'Destroy', post, remote: true, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+
+<br>
+
+  <%= link_to 'New Post', new_post_path %>
+
+  <div id="modal_edit">
+  </div>
+</div>
